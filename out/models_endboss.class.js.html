@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/endboss.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/endboss.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Represents an end boss object that extends MovableObject.
+ * @extends MovableObject
+ */
+class Endboss extends MovableObject {
+    static X;
+    width = 1045;
+    height = 1217;
+    individualSizeFactor = 1.5;
+    y = 0;
+    offsetIncrement = 120;
+    offset = {
+        top: 212 + this.offsetIncrement,
+        left: 73 + this.offsetIncrement,
+        right: 35 + this.offsetIncrement,
+        bottom: 120 + this.offsetIncrement,
+    };
+    hadFirstContact = false;
+    isMoving = false;
+    alarm_sound = new Audio("audio/endbossAlarm.mp3");
+    hurt_sound = new Audio("audio/endbossHurt.mp3");
+    attack_sound = new Audio("audio/endbossHurt.mp3");
+    walk_sound = new Audio("audio/endbossWalk.mp3");
+    death_sound = new Audio("audio/win.mp3");
+    i = 0;
+
+    IMAGES_WALKING = ["img/4_enemie_boss_chicken/1_walk/G1.png", "img/4_enemie_boss_chicken/1_walk/G2.png", "img/4_enemie_boss_chicken/1_walk/G3.png", "img/4_enemie_boss_chicken/1_walk/G4.png"];
+    IMAGES_ALERT = [
+        "img/4_enemie_boss_chicken/2_alert/G5.png",
+        "img/4_enemie_boss_chicken/2_alert/G6.png",
+        "img/4_enemie_boss_chicken/2_alert/G7.png",
+        "img/4_enemie_boss_chicken/2_alert/G8.png",
+        "img/4_enemie_boss_chicken/2_alert/G9.png",
+        "img/4_enemie_boss_chicken/2_alert/G10.png",
+        "img/4_enemie_boss_chicken/2_alert/G11.png",
+        "img/4_enemie_boss_chicken/2_alert/G12.png",
+    ];
+    IMAGES_ATTACK = [
+        "img/4_enemie_boss_chicken/3_attack/G13.png",
+        "img/4_enemie_boss_chicken/3_attack/G14.png",
+        "img/4_enemie_boss_chicken/3_attack/G15.png",
+        "img/4_enemie_boss_chicken/3_attack/G16.png",
+        "img/4_enemie_boss_chicken/3_attack/G17.png",
+        "img/4_enemie_boss_chicken/3_attack/G18.png",
+        "img/4_enemie_boss_chicken/3_attack/G19.png",
+        "img/4_enemie_boss_chicken/3_attack/G20.png",
+    ];
+    IMAGES_HURT = ["img/4_enemie_boss_chicken/4_hurt/G21.png", "img/4_enemie_boss_chicken/4_hurt/G22.png", "img/4_enemie_boss_chicken/4_hurt/G23.png"];
+    IMAGES_DEAD = ["img/4_enemie_boss_chicken/5_dead/G24.png", "img/4_enemie_boss_chicken/5_dead/G25.png", "img/4_enemie_boss_chicken/5_dead/G26.png"];
+
+    /**
+     * Constructs a new endboss object.
+     */
+    constructor() {
+        super();
+        this.loadImage(this.IMAGES_WALKING[3]);
+        this.setOffsets();
+        this.loadImages([...this.IMAGES_WALKING, ...this.IMAGES_ALERT, ...this.IMAGES_ATTACK, ...this.IMAGES_HURT, ...this.IMAGES_DEAD]);
+        this.setParameters();
+        this.animate();
+        this.checkMovement();
+    }
+
+    /**
+     * Sets parameters for Endboss.
+     */
+    setParameters() {
+        this.y = 626 - this.height + this.offset.bottom - this.offsetIncrement * this.individualSizeFactor * this.sizeFactor;
+        this.x = 1279 * 5;
+        this.movementSpeed = 2.5;
+        Endboss.X = this.x + 75;
+    }
+
+    /**
+     * Initiates animation loop.
+     */
+    animate() {
+        setInterval(() => {
+            if (this.i &lt; 8 &amp;&amp; !this.hadFirstContact) this.loadImage(this.IMAGES_WALKING[3]);
+            else if (this.isDead()) this.handleDead();
+            else if (this.isHurt()) this.handleHurt();
+            else if (this.i &lt; 8 &amp;&amp; this.hadFirstContact) this.handleAlert();
+            else if (this.isMoving) this.handleMoving();
+            else if (this.i > 8 &amp;&amp; this.hadFirstContact) this.handleAttack();
+            this.checkFirstContact();
+        }, 100);
+    }
+
+    /**
+     * Checks movement and adjusts accordingly.
+     */
+    checkMovement() {
+        setInterval(() => {
+            if (!this.isDead() &amp;&amp; this.i > 8 &amp;&amp; this.hadFirstContact) {
+                if (this.x + this.offset.left > world.character.x + world.character.width - world.character.offset.right) this.setMovementLeft();
+                else if (this.x + this.width - this.offset.right &lt; world.character.x + world.character.offset.left) this.setMovementRight();
+                else this.isMoving = false;
+            }
+        }, 1000 / 60);
+    }
+
+    /**
+     * Handles Endboss death.
+     */
+    handleDead() {
+        this.resetImage();
+        this.playAnimation(this.IMAGES_DEAD);
+        playSound(this.death_sound);
+        this.reduceSize();
+    }
+
+    /**
+     * Handles Endboss getting hurt.
+     */
+    handleHurt() {
+        this.resetImage();
+        this.playAnimation(this.IMAGES_HURT);
+        this.hadFirstContact = true;
+    }
+
+    /**
+     * Handles Endboss alert state.
+     */
+    handleAlert() {
+        this.resetImage();
+        Endboss.X = this.x + 75;
+        this.playAnimation(this.IMAGES_ALERT);
+        playSound(this.alarm_sound);
+    }
+
+    /**
+     * Handles Endboss walking animation.
+     */
+    handleMoving() {
+        this.playAnimation(this.IMAGES_WALKING);
+        this.animationStarted = false;
+    }
+
+    /**
+     * Handles Endboss attack state.
+     */
+    handleAttack() {
+        this.resetImage();
+        this.playAnimation(this.IMAGES_ATTACK);
+        playSound(this.alarm_sound);
+    }
+
+    /**
+     * Reduces Endboss size.
+     */
+    reduceSize() {
+        this.width = this.width - 50;
+        this.height = this.height - 50;
+        this.x = this.x + 25;
+        this.y = this.y + 25;
+    }
+
+    /**
+     * Checks if Endboss had first contact with the character.
+     */
+    checkFirstContact() {
+        this.i++;
+        if (world.character.x > 5800 &amp;&amp; !this.hadFirstContact) {
+            this.i = 0;
+            this.hadFirstContact = true;
+        }
+    }
+
+    /**
+     * Sets Endboss movement to the left.
+     */
+    setMovementLeft() {
+        this.isMoving = true;
+        this.moveLeft();
+        playSound(this.walk_sound);
+        this.otherDirection = false;
+        Endboss.X = this.x + 75;
+    }
+
+    /**
+     * Sets Endboss movement to the right.
+     */
+    setMovementRight() {
+        this.isMoving = true;
+        this.moveRight();
+        playSound(this.walk_sound);
+        this.otherDirection = true;
+        Endboss.X = this.x + 75;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="NormalChicken.html">NormalChicken</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="StatusBarBottles.html">StatusBarBottles</a></li><li><a href="StatusBarCoins.html">StatusBarCoins</a></li><li><a href="StatusBarEndboss.html">StatusBarEndboss</a></li><li><a href="StatusBarHealth.html">StatusBarHealth</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addListenersToButtons">addListenersToButtons</a></li><li><a href="global.html#addTouchListeners">addTouchListeners</a></li><li><a href="global.html#changeView">changeView</a></li><li><a href="global.html#clearAllIntervals">clearAllIntervals</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#dontClose">dontClose</a></li><li><a href="global.html#genLegal">genLegal</a></li><li><a href="global.html#genPrivacy">genPrivacy</a></li><li><a href="global.html#handleFullscreenChange">handleFullscreenChange</a></li><li><a href="global.html#handleKey">handleKey</a></li><li><a href="global.html#hideElement">hideElement</a></li><li><a href="global.html#hideMenu">hideMenu</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#leaveFullscreen">leaveFullscreen</a></li><li><a href="global.html#playSound">playSound</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setFullscreen">setFullscreen</a></li><li><a href="global.html#showElement">showElement</a></li><li><a href="global.html#showLegal">showLegal</a></li><li><a href="global.html#showPrivacy">showPrivacy</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#stopGame">stopGame</a></li><li><a href="global.html#toggleMute">toggleMute</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 28 2024 23:44:20 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

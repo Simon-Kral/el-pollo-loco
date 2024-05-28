@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: movable-object.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: movable-object.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Represents a movable object that extends a drawable object.
+ * @class
+ * @extends DrawableObject
+ */
+class MovableObject extends DrawableObject {
+    movementSpeed = 0.2;
+    otherDirection = false;
+    speedY = 0;
+    acceleration = 0.3;
+    hp = 5;
+    lastHit = 0;
+
+    /**
+     * Applies gravity to the object's vertical movement.
+     */
+    applyGravity() {
+        setInterval(() => {
+            if (!this.isSplashed) {
+                if (this.isAboveGround() || this.speedY > 0) {
+                    this.y -= this.speedY;
+                    this.speedY -= this.acceleration;
+                } else this.y = this.groundHeight;
+            }
+        }, 1000 / 100);
+    }
+
+    /**
+     * Checks if the object is above the ground.
+     * @returns {boolean} True if the object is above the ground, false otherwise.
+     */
+    isAboveGround() {
+        if (this instanceof ThrowableObject) return !this.isSplashed;
+        else return this.y &lt; this.groundHeight &amp;&amp; this.y - this.speedY &lt; this.groundHeight;
+    }
+
+    /**
+     * Checks if the object is on the ground.
+     * @returns {boolean} True if the object is on the ground, false otherwise.
+     */
+    isOnGround() {
+        return this.y >= this.groundHeight;
+    }
+
+    /**
+     * Checks if the object is colliding with another object.
+     * @param {object} obj - The object to check collision with.
+     * @returns {boolean} True if the object is colliding with the specified object, false otherwise.
+     */
+    isColliding(obj) {
+        return (
+            this.x + this.width - this.offset.right > obj.x + obj.offset.left &amp;&amp;
+            this.y + this.height - this.offset.bottom > obj.y + obj.offset.top &amp;&amp;
+            this.x + this.offset.left &lt; obj.x + obj.width - obj.offset.right &amp;&amp;
+            this.y + this.offset.top &lt; obj.y + obj.height - obj.offset.bottom
+        );
+    }
+
+    /**
+     * Moves the object to the right.
+     */
+    moveRight() {
+        this.x += this.movementSpeed;
+    }
+
+    /**
+     * Moves the object to the left.
+     */
+    moveLeft() {
+        this.x -= this.movementSpeed;
+    }
+
+    /**
+     * Initiates a jump action for the object.
+     * @async
+     */
+    async jump() {
+        await playSound(this.jump_sound);
+        this.speedY = 11;
+    }
+
+    /**
+     * Inflicts damage to the object.
+     * @param {number} damage - The amount of damage to inflict.
+     */
+    hit(damage) {
+        this.hp -= damage;
+        if (this.hp &lt;= 0) this.hp = 0;
+        this.lastHit = new Date().getTime();
+    }
+
+    /**
+     * Checks if the object is dead.
+     * @returns {number} True if the object is dead, false otherwise.
+     */
+    isDead() {
+        return this.hp == 0;
+    }
+
+    /**
+     * Checks if the object is currently hurt.
+     * @returns {boolean} True if the object is currently hurt, false otherwise.
+     */
+    isHurt() {
+        let timePassed = new Date().getTime() - this.lastHit;
+        timePassed = timePassed / 1000;
+        return timePassed &lt; 1;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="NormalChicken.html">NormalChicken</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="StatusBarBottles.html">StatusBarBottles</a></li><li><a href="StatusBarCoins.html">StatusBarCoins</a></li><li><a href="StatusBarEndboss.html">StatusBarEndboss</a></li><li><a href="StatusBarHealth.html">StatusBarHealth</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 28 2024 23:42:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

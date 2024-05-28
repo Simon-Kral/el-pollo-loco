@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: throwable-object.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: throwable-object.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Class representing a throwable object, extending the MovableObject class.
+ */
+class ThrowableObject extends MovableObject {
+    height = 400;
+    width = 400;
+    individualSizeFactor = 1;
+    groundHeight;
+    isSplashed = false;
+    splashAnimationStarted = false;
+    splashAnimationCounter = 0;
+    splashAnimationIsPlayed = false;
+    movementSpeed = 10;
+    offsetIncrement = 50;
+    offset = {
+        top: 50 + this.offsetIncrement,
+        left: 50 + this.offsetIncrement,
+        right: 50 + this.offsetIncrement,
+        bottom: 50 + this.offsetIncrement,
+    };
+    break_sound = new Audio("audio/breakBottle.mp3");
+
+    IMAGES_FLYING = [
+        "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
+        "img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
+        "img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png",
+        "img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png",
+    ];
+    IMAGES_SPLASHING = [
+        "img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png",
+        "img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png",
+        "img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png",
+        "img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png",
+        "img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png",
+        "img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png",
+    ];
+
+    /**
+     * Constructs a new instance of ThrowableObject.
+     * @param {number} x - The x-coordinate of the object.
+     * @param {number} y - The y-coordinate of the object.
+     */
+    constructor(x, y) {
+        super();
+        this.loadImage("img/6_salsa_bottle/salsa_bottle.png");
+        this.x = x;
+        this.y = y;
+        this.setOffsets();
+        this.groundHeight = 626 - this.height + this.offset.bottom;
+        this.loadImages(this.IMAGES_FLYING);
+        this.loadImages(this.IMAGES_SPLASHING);
+        this.throw();
+        this.animate();
+    }
+
+    /**
+     * Initiates the throwing action of the object.
+     */
+    throw() {
+        StatusBarBottles.amount--;
+        this.speedY = 10;
+        this.applyGravity();
+        setInterval(() => {
+            if (!this.isSplashed) this.x += this.movementSpeed;
+        }, 1000 / 60);
+    }
+
+    /**
+     * Initiates the splash action of the object.
+     */
+    splash() {
+        this.splashAnimationStarted = true;
+        this.isSplashed = true;
+    }
+
+    /**
+     * Initiates the animation for the throwable object.
+     */
+    animate() {
+        setInterval(() => {
+            if (this.isSplashed &amp;&amp; this.splashAnimationCounter &lt; this.IMAGES_SPLASHING.length - 1 &amp;&amp; !this.splashAnimationIsPlayed) this.playSplashAnimation();
+            else if (!this.isSplashed) this.playAnimation(this.IMAGES_FLYING);
+            else this.splashAnimationIsPlayed = true;
+        }, 60);
+    }
+
+    /**
+     * Plays the splash animation of the object.
+     */
+    playSplashAnimation() {
+        if (this.splashAnimationStarted) {
+            this.currentImage = 0;
+            playSound(this.break_sound);
+            this.splashAnimationStarted = false;
+        }
+        this.playAnimation(this.IMAGES_SPLASHING);
+        this.splashAnimationCounter++;
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Bottle.html">Bottle</a></li><li><a href="Character.html">Character</a></li><li><a href="Chicken.html">Chicken</a></li><li><a href="Cloud.html">Cloud</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObject.html">DrawableObject</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="Keyboard.html">Keyboard</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="NormalChicken.html">NormalChicken</a></li><li><a href="SmallChicken.html">SmallChicken</a></li><li><a href="StatusBarBottles.html">StatusBarBottles</a></li><li><a href="StatusBarCoins.html">StatusBarCoins</a></li><li><a href="StatusBarEndboss.html">StatusBarEndboss</a></li><li><a href="StatusBarHealth.html">StatusBarHealth</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Tue May 28 2024 23:42:37 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
