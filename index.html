@@ -5,13 +5,175 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>El Pollo Loco</title>
         <link rel="stylesheet" href="style.css" />
+        <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
+        <script src="models/drawable-object.class.js"></script>
         <script src="models/movable-object.class.js"></script>
+        <script src="models/character.class.js"></script>
+        <script src="models/chicken.class.js"></script>
+        <script src="models/smallChicken.class.js"></script>
+        <script src="models/normalChicken.class.js"></script>
+        <script src="models/cloud.class.js"></script>
+        <script src="models/status-bar-health.class.js"></script>
+        <script src="models/status-bar-bottles.class.js"></script>
+        <script src="models/status-bar-coins.class.js"></script>
+        <script src="models/coin.class.js"></script>
+        <script src="models/bottle.class.js"></script>
+        <script src="models/world.class.js"></script>
+        <script src="models/background-object.class.js"></script>
+        <script src="models/keyboard.class.js"></script>
+        <script src="models/level.class.js"></script>
+        <script src="models/throwable-object.class.js"></script>
+        <script src="models/endboss.class.js"></script>
+        <script src="models/status-bar-endboss.class.js"></script>
+        <script src="levels/level1.js"></script>
         <script src="js/game.js"></script>
+        <script src="js/genHtml.js"></script>
     </head>
 
     <body onload="init()">
-        <h1>El Pollo Loco</h1>
-        <canvas id="canvas" width="720px" height="480px"></canvas>
+        <div id="metaOverlay" class="dNone" onclick="hideElement(metaOverlay)">
+            <div id="metaOverlayContent" onclick="dontClose(event)">
+                <div class="contentWrapper customScrollbar">
+                    <div id="metaContent"></div>
+                    <div class="buttonWrapper">
+                        <button onclick="hideElement(metaOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="rotationOverlay" class="dNone" onclick="hideElement(rotationOverlay)">
+            <div id="rotationOverlayContent" onclick="dontClose(event)">
+                <div id="rotationContent"><span>please turn your device to play!</span></div>
+                <div class="buttonWrapper">
+                    <button onclick="hideElement(rotationOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                </div>
+            </div>
+        </div>
+
+        <h1 id="mainHeader">El Pollo Loco</h1>
+        <div id="canvasWrapper" class="dNone">
+            <div id="overlay" class="dNone" onclick="hideElement(overlay)">
+                <div id="overlayContent" onclick="dontClose(event)">
+                    <div class="overlayContentTopBox">
+                        <div class="topBoxGameExplanation">
+                            <h3>El Pollo Loco</h3>
+                            <table id="menuKeys">
+                                <tbody>
+                                    <tr>
+                                        <td class="key"><span>A</span></td>
+                                        <td><span> - </span></td>
+                                        <td><span>Move Left</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key"><span>D</span></td>
+                                        <td><span> - </span></td>
+                                        <td><span>Move Right</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key"><span>Space</span></td>
+                                        <td><span> - </span></td>
+                                        <td><span>Jump</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="key"><span>E</span></td>
+                                        <td><span> - </span></td>
+                                        <td><span>Throw Bottle</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="overlayContentTopBoxButtons">
+                            <button onclick="changeView('help', this)" class="overlayButton" id="helpButton"><img src="icons/help.png" alt="" /></button>
+                            <button onclick="toggleMute('gameSound')" class="overlayButton" id="gameSoundButton">
+                                <img src="icons/speaker.png" alt="" />
+                            </button>
+                            <button onclick="toggleMute('backgroundMusic')" class="overlayButton" id="backgroundMusicButton"><img src="icons/musicalNote.png" alt="" /></button>
+                            <button onclick="hideElement(overlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                        </div>
+                    </div>
+                    <span id="menuHelp">
+                        El Pollo Loco is a 2D Jump 'n' Run Game where you play our Mexican Hero Pepe.<br />Collect Coins and Bottles of Salsa Sauce.<br />Defeat Chicken by jumping on them or throwing a Bottle at them.<br />But don't waste all of your
+                        Bottles on the Chicken because the Endboss <br />is waiting for you at the End of the Level and jumping on him just makes him angry.<br /><br />
+                    </span>
+                    <div class="overlayButtonsBox">
+                        <button onclick="restartGame()" class="overlayButton">Restart</button>
+                        <button onclick="stopGame()" class="overlayButton">Leave</button>
+                    </div>
+                </div>
+            </div>
+            <canvas id="canvas" width="1280px" height="720px" class=""></canvas>
+            <div id="gameElements" class="">
+                <div class="gameElementsButtonBox">
+                    <button onclick="setFullscreen()" id="setFullscreenButton">
+                        <svg height="40" width="40" class="yellow">
+                            <line x1="5" y1="16" x2="5" y2="2" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="2" y1="5" x2="16" y2="5" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="24" y1="5" x2="38" y2="5" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="35" y1="2" x2="35" y2="16" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="35" y1="24" x2="35" y2="38" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="38" y1="35" x2="24" y2="35" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="16" y1="35" x2="2" y2="35" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="5" y1="38" x2="5" y2="24" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="5" y1="15" x2="5" y2="3" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="3" y1="5" x2="15" y2="5" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="25" y1="5" x2="37" y2="5" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="35" y1="3" x2="35" y2="15" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="35" y1="25" x2="35" y2="37" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="37" y1="35" x2="25" y2="35" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="15" y1="35" x2="3" y2="35" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="5" y1="37" x2="5" y2="25" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                        </svg>
+                    </button>
+                    <button onclick="showElement(overlay)">
+                        <svg height="40" width="45" class="yellow">
+                            <line x1="0" y1="5" x2="45" y2="5" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="1" y1="5" x2="44" y2="5" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="0" y1="20" x2="45" y2="20" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="1" y1="20" x2="44" y2="20" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="0" y1="35" x2="45" y2="35" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="1" y1="35" x2="44" y2="35" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="panelsLeft">
+                    <button id="btnLeft">
+                        <svg height="26" width="21" class="yellow">
+                            <line x1="2" y1="15" x2="15" y2="2" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="2" y1="11" x2="15" y2="24" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="2.6" y1="14.3" x2="14.3" y2="2.7" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="2.7" y1="11.7" x2="14.3" y2="23.3" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                        </svg>
+                    </button>
+                    <button id="btnRight">
+                        <svg height="26" width="21" class="yellow">
+                            <line x1="19" y1="15" x2="6" y2="2" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="19" y1="11" x2="6" y2="24" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="18.4" y1="14.3" x2="6.7" y2="2.7" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="18.4" y1="11.7" x2="6.7" y2="23.3" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="panelsRight">
+                    <button id="btnJump">
+                        <svg height="17" width="26" class="yellow">
+                            <line x1="15" y1="2" x2="2" y2="15" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="11" y1="2" x2="24" y2="15" stroke="black" stroke-width="6" class="blackLine" />
+                            <line x1="14.3" y1="2.7" x2="2.7" y2="14.3" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                            <line x1="11.7" y1="2.7" x2="23.3" y2="14.3" stroke="#FFC225" stroke-width="4" class="yellowLine" />
+                        </svg>
+                    </button>
+                    <button id="btnThrow">
+                        <img src="img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png" alt="salsa" />
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="menu">
+            <h2 id="youWin" class="winLose dNone">You Win!</h2>
+            <h2 id="youLose" class="winLose dNone">You Lose!</h2>
+            <button onclick="startGame()">Start Game</button>
+        </div>
+        <footer id="footer"><a onclick="showLegal(metaOverlay)">Impressum</a><a onclick="showPrivacy(metaOverlay)">Datenschutz</a></footer>
     </body>
 </html>
-test

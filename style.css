@@ -1,9 +1,558 @@
-body{
+@font-face {
+    font-family: 'Arvo';
+    src: url('fonts/Arvo/Arvo-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Zabars';
+    src: url('fonts/zabars/ZABARS/Zabars.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Marlboro';
+    src: url('fonts/marlboro/Marlboro.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Boogaloo';
+    src: url('fonts/Boogaloo/Boogaloo-Regular.ttf') format('truetype');
+}
+
+body {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url('img/5_background/wallpaper\ -\ desert.png');
+    background-position: center;
+    background-size: cover;
+    font-family: "Boogaloo", Arial, Helvetica, sans-serif;
+}
+
+footer {
+    position: fixed;
+    bottom: 5vh;
+    width: 230px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    a:hover {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+}
+
+canvas {
+    animation-name: start;
+    animation-duration: 1s;
+}
+
+h1 {
+    position: fixed;
+    top: 0;
+    padding: 0vh 0;
+    font-size: 70px;
+    font-weight: 100;
+    letter-spacing: 3px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    background-image: linear-gradient( #FF9900, #FFDF00, #FFC225);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px #CA4C1E;
+}
+
+h2 {
+    position: fixed;
+    top: 30vh;
+    padding: 0vh 0;
+    font-size: 100px;
+    font-weight: 100;
+    letter-spacing: 3px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    background-image: linear-gradient( #FF9900, #FFDF00, #FFC225);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px #CA4C1E;
+}
+
+.winLose {
+    animation-name: youWin;
+    animation-duration: 1s;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+}
+
+#metaOverlay {
+    background: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    backdrop-filter: blur(2px);
+    #metaOverlayContent {
+        background-color: rgb(176, 133, 24);
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        padding: 32px;
+        .contentWrapper {
+            display: flex;
+            width: 80vw;
+            height: 80vh;
+            overflow: auto;
+            .buttonWrapper {
+                min-width: 60px;
+                margin-right: 20px;
+                display: flex;
+                justify-content: center;
+            }
+            .overlayButton {
+                width: 46px;
+                height: 46px;
+                border: 3px solid black;
+                border-radius: 256px;
+                background-color: #FFC225;
+                font-family: "Boogaloo", Arial, Helvetica, sans-serif;
+                margin: 2px;
+                padding: 8px 8px;
+                display: flex;
+                img {
+                    height: 24px;
+                    width: 24px;
+                }
+            }
+            .overlayButton:hover {
+                width: 49px;
+                height: 49px;
+                background-color: #FFDF00;
+                margin: 0px;
+                img {
+                    height: 26px;
+                    width: 26px;
+                }
+            }
+            #metaContent {
+                .impressum {
+                    padding-bottom: 100px;
+                }
+                .law {
+                    padding-bottom: 100px;
+                }
+                h1 {
+                    position: relative;
+                    font-size: 48px;
+                    padding: 0;
+                    letter-spacing: 1px;
+                    top: 0;
+                }
+                h2 {
+                    position: relative;
+                    letter-spacing: 1px;
+                    top: 0;
+                    font-size: 32px;
+                    margin-block-start: 1em;
+                    margin-block-end: 1em;
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+
+#rotationOverlay {
+    background: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    backdrop-filter: blur(2px);
+    #rotationOverlayContent {
+        background-color: rgb(176, 133, 24);
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        padding: 32px;
+        display: flex;
+        gap: 20px;
+        .buttonWrapper {
+            min-width: 60px;
+            display: flex;
+            justify-content: center;
+        }
+        .overlayButton {
+            width: 46px;
+            height: 46px;
+            border: 3px solid black;
+            border-radius: 256px;
+            background-color: #FFC225;
+            font-family: "Boogaloo", Arial, Helvetica, sans-serif;
+            margin: 2px;
+            padding: 8px 8px;
+            display: flex;
+            img {
+                height: 24px;
+                width: 24px;
+            }
+        }
+        .overlayButton:hover {
+            width: 49px;
+            height: 49px;
+            background-color: #FFDF00;
+            margin: 0px;
+            img {
+                height: 26px;
+                width: 26px;
+            }
+        }
+        #rotationContent {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+.customScrollbar::-webkit-scrollbar {
+    width: 16px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+    background-color: #FFC225;
+    border-radius: 16px;
+    border: 4px solid black;
+}
+
+#overlay {
+    background: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    backdrop-filter: blur(2px);
+    #overlayContent {
+        background-color: rgb(176, 133, 24);
+        padding: 32px;
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 64px;
+        min-width: 500px;
+        .overlayContentTopBox {
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            .topBoxGameExplanation {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                margin-right: 64px;
+            }
+            .overlayContentTopBoxButtons {
+                width: 200px;
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-start;
+                .overlayButton {
+                    padding: 8px 8px;
+                    display: flex;
+                }
+                .overlayButton:hover {
+                    padding: 9px 9px;
+                }
+            }
+        }
+        .overlayButtonsBox {
+            display: flex;
+            justify-content: space-around;
+            .overlayButton {
+                padding: 16px 32px;
+            }
+        }
+        .overlayButton {
+            font-size: 24px;
+            border: 3px solid black;
+            border-radius: 256px;
+            background-color: #FFC225;
+            font-family: "Boogaloo", Arial, Helvetica, sans-serif;
+            margin: 2px;
+            img {
+                height: 24px;
+            }
+        }
+        .overlayButton:hover {
+            font-size: 26px;
+            background-color: #FFDF00;
+            margin: 0px;
+            img {
+                height: 26px;
+            }
+        }
+    }
+}
+
+#canvasWrapper {
+    max-width: 1280px;
+    aspect-ratio: 1280/720;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-canvas{
-    background-color: black;
+#gameElements {
+    position: absolute;
+    top: 50;
+    left: 50;
+    width: 1280px;
+    aspect-ratio: 1280/720;
+    .gameElementsButtonBox {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        button {
+            width: 49px;
+            height: 44px;
+            border: none;
+            padding: 0;
+            background-color: transparent;
+            margin-left: 16px;
+        }
+        button:hover {
+            .yellowLine {
+                stroke: #FFDF00;
+                stroke-width: 5;
+            }
+            .blackLine {
+                stroke-width: 7;
+            }
+        }
+    }
+}
+
+.panelsLeft {
+    position: absolute;
+    left: calc(11.71875% + 7.1484375vw - 75px);
+    bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    button {
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        padding: 0;
+        background-color: rgb(176, 133, 24);
+        border-radius: 80px;
+        svg {
+            padding: 6px;
+        }
+        img {
+            height: 35px;
+        }
+    }
+}
+
+.panelsRight {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px;
+    button {
+        width: 40px;
+        height: 40px;
+        border: 1px solid black;
+        padding: 0;
+        background-color: rgb(176, 133, 24);
+        border-radius: 80px;
+        svg {
+            padding: 6px;
+        }
+        img {
+            height: 35px;
+        }
+    }
+}
+
+.yellow {
+    margin-bottom: 0;
+    padding: 2px;
+}
+
+@keyframes start {
+    from {
+        height: 0px;
+    }
+    to {
+        height: calc(720px * 100vh);
+    }
+}
+
+@keyframes youWin {
+    from {
+        font-size: 1px;
+    }
+    to {
+        font-size: 100px;
+    }
+}
+
+canvas {
+    background-color: transparent;
+    display: block;
+}
+
+#menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+    margin-top: 10vh;
+    table {
+        position: fixed;
+        top: 20vh;
+        left: 2vh;
+        padding-left: 16px;
+    }
+    button {
+        font-size: 32px;
+        border: 3px solid black;
+        padding: 16px 32px;
+        border-radius: 128px;
+        background-color: #FFC225;
+        font-family: "Boogaloo", Arial, Helvetica, sans-serif;
+        margin-bottom: 2px;
+    }
+    button:hover {
+        font-size: 34px;
+        background-color: #FFDF00;
+        margin-bottom: 0px;
+    }
+}
+
+#menuHelp {
+    display: none;
+}
+
+tr {
+    td {
+        padding: 0 8px 16px 0;
+        font-size: 24px;
+    }
+    .key {
+        text-align: center;
+        span {
+            border: 2px solid black;
+            padding: 0 8px;
+        }
+    }
+}
+
+.dNone {
+    display: none !important;
+}
+
+@media only screen and (max-width: 1280px) {
+    canvas {
+        max-width: 100%;
+    }
+    #gameElements {
+        max-width: 100%;
+    }
+    #canvasWrapper {
+        max-width: 100%;
+    }
+    #overlayContent {
+        max-width: 100%;
+    }
+}
+
+@media only screen and (max-width: 950px) {
+    #overlay {
+        #overlayContent {
+            .overlayContentTopBox {
+                .topBoxGameExplanation {
+                    margin-right: 16px;
+                    gap: 0;
+                }
+            }
+        }
+    }
+    #menuKeys {
+        td {
+            padding: 0 8px 0px 0;
+            span {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-height: 820px) {
+    canvas {
+        height: 100vh;
+    }
+    #gameElements {
+        width: auto;
+        height: 100vh;
+    }
+    #canvasWrapper {
+        height: 100vh;
+    }
+    #overlayContent {
+        max-height: 100vh;
+        overflow: auto;
+    }
+    #mainHeader {
+        font-size: 24px;
+        top: 2vh;
+        left: 2vw;
+    }
+    h2 {
+        top: 12vh;
+    }
+    #menuKeys {
+        td {
+            padding: 0 8px 0px 0;
+            span {
+                font-size: 16px;
+            }
+        }
+    }
+    #overlay {
+        #overlayContent {
+            gap: 8px;
+            .overlayContentTopBox {
+                .topBoxGameExplanation {
+                    margin-right: 16px;
+                    gap: 0;
+                }
+            }
+        }
+    }
 }
