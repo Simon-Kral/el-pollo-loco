@@ -2,7 +2,7 @@
  * Class representing a status bar for bottles, extending the DrawableObject class.
  */
 class StatusBarBottles extends DrawableObject {
-    static amount = 50;
+    static amount = 0;
     static lastThrown = 0;
     width = 162;
     height = 158;
@@ -15,6 +15,7 @@ class StatusBarBottles extends DrawableObject {
      */
     constructor() {
         super();
+        StatusBarBottles.amount = 0;
         this.loadImage(this.IMAGE);
         this.setOffsets();
         this.x = 350;
@@ -28,6 +29,6 @@ class StatusBarBottles extends DrawableObject {
     static isOnCooldown() {
         let timePassed = new Date().getTime() - StatusBarBottles.lastThrown;
         timePassed = timePassed / 1000;
-        return timePassed < 0.3;
+        return timePassed < 1;
     }
 }

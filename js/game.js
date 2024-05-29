@@ -1,7 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let menu, youWin, youLose, overlay, gameElements, metaOverlay, footer, header, rotationOverlay;
+let menu, youWin, youLose, gameOverlay, gameElements, metaOverlay, footer, header, rotationOverlay, mainOverlay, mainButton;
 let gameSoundMuted = false;
 let backgroundMusicMuted = false;
 let backgroundMusicIsPlaying = false;
@@ -22,12 +22,14 @@ function init() {
     menu = document.getElementById("menu");
     youWin = document.getElementById("youWin");
     youLose = document.getElementById("youLose");
-    overlay = document.getElementById("overlay");
+    gameOverlay = document.getElementById("gameOverlay");
     gameElements = document.getElementById("gameElements");
     metaOverlay = document.getElementById("metaOverlay");
     footer = document.getElementById("footer");
     header = document.getElementById("mainHeader");
     rotationOverlay = document.getElementById("rotationOverlay");
+    mainOverlay = document.getElementById("mainOverlay");
+    mainButton = document.getElementById("mainButton");
     addTouchListeners();
 }
 
@@ -35,15 +37,16 @@ function init() {
  * Starts the game by initializing the level, creating the world, and displaying the necessary elements.
  */
 async function startGame() {
-    hideMenu();
-    await delay(200);
-    showElement(canvas);
-    initLevel();
-    world = new World(canvas, keyboard);
-    await delay(100);
-    showElement(canvasWrapper);
     if (screen.availHeight > screen.availWidth) {
         showElement(rotationOverlay);
+    } else {
+        hideMenu();
+        await delay(200);
+        showElement(canvas);
+        initLevel();
+        world = new World(canvas, keyboard);
+        await delay(100);
+        showElement(canvasWrapper);
     }
 }
 
@@ -51,7 +54,7 @@ async function startGame() {
  * Hides the main menu and related elements.
  */
 function hideMenu() {
-    hideElement(menu, youWin, youLose, footer, header);
+    hideElement(menu, youWin, youLose, footer, header, mainButton, mainOverlay);
 }
 
 /**
@@ -63,8 +66,8 @@ async function stopGame() {
     world.background_music.pause();
     backgroundMusicIsPlaying = false;
     world.character.snore_sound.pause();
-    showElement(menu, footer, header);
-    hideElement(canvasWrapper, overlay);
+    showElement(menu, footer, header, mainButton);
+    hideElement(canvasWrapper, gameOverlay);
 }
 
 /**
@@ -94,7 +97,7 @@ async function restartGame() {
     world.character.snore_sound.pause();
     initLevel();
     world = new World(canvas, keyboard);
-    hideElement(overlay);
+    hideElement(gameOverlay);
 }
 
 /**
@@ -114,10 +117,18 @@ async function delay(milliseconds) {
 }
 
 /**
- * Plays a sound if the background music is not muted.
+ * Plays a sound if the game sound is not muted.
  * @param {HTMLAudioElement} sound - The sound to play.
  */
 async function playSound(sound) {
+    if (!gameSoundMuted) await sound.play();
+}
+
+/**
+ * Plays a sound if the background music is not muted.
+ * @param {HTMLAudioElement} sound - The sound to play.
+ */
+async function playMusic(sound) {
     if (!backgroundMusicMuted) await sound.play();
 }
 
@@ -246,6 +257,7 @@ function addListenersToButtons(buttonMap) {
         const button = document.getElementById(buttonId);
         button.addEventListener("touchstart", () => (keyboard[key] = true));
         button.addEventListener("touchend", () => (keyboard[key] = false));
+        button.addEventListener("contextmenu", (e) => e.preventDefault());
     }
 }
 

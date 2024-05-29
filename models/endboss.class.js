@@ -23,6 +23,7 @@ class Endboss extends MovableObject {
     walk_sound = new Audio("audio/endbossWalk.mp3");
     death_sound = new Audio("audio/win.mp3");
     i = 0;
+    lastHurt = 0;
 
     IMAGES_WALKING = ["img/4_enemie_boss_chicken/1_walk/G1.png", "img/4_enemie_boss_chicken/1_walk/G2.png", "img/4_enemie_boss_chicken/1_walk/G3.png", "img/4_enemie_boss_chicken/1_walk/G4.png"];
     IMAGES_ALERT = [
@@ -55,6 +56,7 @@ class Endboss extends MovableObject {
         super();
         this.loadImage(this.IMAGES_WALKING[3]);
         this.setOffsets();
+        this.hp = 5;
         this.loadImages([...this.IMAGES_WALKING, ...this.IMAGES_ALERT, ...this.IMAGES_ATTACK, ...this.IMAGES_HURT, ...this.IMAGES_DEAD]);
         this.setParameters();
         this.animate();
@@ -67,7 +69,7 @@ class Endboss extends MovableObject {
     setParameters() {
         this.y = 626 - this.height + this.offset.bottom - this.offsetIncrement * this.individualSizeFactor * this.sizeFactor;
         this.x = 1279 * 5;
-        this.movementSpeed = 2.5;
+        this.movementSpeed = 5;
         Endboss.X = this.x + 75;
     }
 
@@ -83,6 +85,9 @@ class Endboss extends MovableObject {
             else if (this.isMoving) this.handleMoving();
             else if (this.i > 8 && this.hadFirstContact) this.handleAttack();
             this.checkFirstContact();
+            if (!this.isHurt()) {
+                this.movementSpeed = 2.5;
+            }
         }, 100);
     }
 
@@ -116,6 +121,7 @@ class Endboss extends MovableObject {
         this.resetImage();
         this.playAnimation(this.IMAGES_HURT);
         this.hadFirstContact = true;
+        this.movementSpeed = 10;
     }
 
     /**

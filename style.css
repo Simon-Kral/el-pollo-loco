@@ -81,6 +81,23 @@ h2 {
     -webkit-text-stroke: 1px #CA4C1E;
 }
 
+#mainButton {
+    font-size: 70px;
+    font-weight: 100;
+    height: 70px;
+    font-family: "Boogaloo", Arial, Helvetica, sans-serif;
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    top: 0;
+    right: 30px;
+    background-image: linear-gradient( #FF9900, #FFDF00, #FFC225);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px #CA4C1E;
+}
+
 .winLose {
     animation-name: youWin;
     animation-duration: 1s;
@@ -231,17 +248,7 @@ button:hover {
     }
 }
 
-.customScrollbar::-webkit-scrollbar {
-    width: 16px;
-}
-
-.customScrollbar::-webkit-scrollbar-thumb {
-    background-color: #FFC225;
-    border-radius: 16px;
-    border: 4px solid black;
-}
-
-#overlay {
+#mainOverlay {
     background: rgba(0, 0, 0, 0.2);
     position: fixed;
     top: 0;
@@ -253,7 +260,81 @@ button:hover {
     justify-content: center;
     z-index: 99;
     backdrop-filter: blur(2px);
-    #overlayContent {
+    #mainOverlayContent {
+        background-color: rgb(176, 133, 24);
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+        padding: 32px;
+        display: flex;
+        gap: 20px;
+        h3 {
+            font-size: 32px;
+            margin-block-start: 0;
+            margin-bottom: 32px;
+        }
+        .gameExplanation {
+            margin-bottom: 8px;
+        }
+        #gameHelp {
+            max-width: 300px;
+            font-size: 20px;
+        }
+        .buttonWrapper {
+            min-width: 60px;
+            display: flex;
+            justify-content: center;
+        }
+        .overlayButton {
+            width: 46px;
+            height: 46px;
+            border: 3px solid black;
+            border-radius: 256px;
+            background-color: #FFC225;
+            font-family: "Boogaloo", Arial, Helvetica, sans-serif;
+            margin: 2px;
+            padding: 8px 8px;
+            display: flex;
+            img {
+                height: 24px;
+                width: 24px;
+            }
+        }
+        .overlayButton:hover {
+            width: 49px;
+            height: 49px;
+            background-color: #FFDF00;
+            margin: 0px;
+            img {
+                height: 26px;
+                width: 26px;
+            }
+        }
+    }
+}
+
+.customScrollbar::-webkit-scrollbar {
+    width: 16px;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+    background-color: #FFC225;
+    border-radius: 16px;
+    border: 4px solid black;
+}
+
+#gameOverlay {
+    background: rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    backdrop-filter: blur(2px);
+    #gameOverlayContent {
         background-color: rgb(176, 133, 24);
         padding: 32px;
         border: 2px solid rgba(0, 0, 0, 0.2);
@@ -262,17 +343,17 @@ button:hover {
         flex-direction: column;
         gap: 64px;
         min-width: 500px;
-        .overlayContentTopBox {
+        .gameOverlayContentTopBox {
             display: flex;
             justify-content: space-between;
             font-size: 20px;
-            .topBoxGameExplanation {
+            .gameExplanation {
                 display: flex;
                 flex-direction: column;
                 gap: 32px;
                 margin-right: 64px;
             }
-            .overlayContentTopBoxButtons {
+            .topBoxButtons {
                 width: 200px;
                 display: flex;
                 justify-content: space-around;
@@ -357,7 +438,7 @@ button:hover {
     position: absolute;
     left: calc(11.71875% + 7.1484375vw - 75px);
     bottom: 10px;
-    display: flex;
+    display: none;
     justify-content: space-between;
     gap: 50px;
     button {
@@ -380,7 +461,7 @@ button:hover {
     position: absolute;
     right: 20px;
     bottom: 10px;
-    display: flex;
+    display: none;
     justify-content: space-between;
     gap: 32px;
     button {
@@ -492,7 +573,7 @@ tr {
     }
 }
 
-@media only screen and (max-width: 950px) {
+@media only screen and (max-width: 1380px) {
     #overlay {
         #overlayContent {
             .overlayContentTopBox {
@@ -510,6 +591,15 @@ tr {
                 font-size: 16px;
             }
         }
+    }
+    .panelsLeft {
+        display: flex;
+    }
+    .panelsRight {
+        display: flex;
+    }
+    #setFullscreenButton {
+        display: none;
     }
 }
 
@@ -538,21 +628,34 @@ tr {
     }
     #menuKeys {
         td {
-            padding: 0 8px 0px 0;
+            padding: 0 8px 8px 0;
             span {
                 font-size: 16px;
             }
         }
     }
-    #overlay {
-        #overlayContent {
+    #gameOverlay {
+        #gameOverlayContent {
             gap: 8px;
-            .overlayContentTopBox {
+            .gameOverlayContentTopBox {
                 .topBoxGameExplanation {
                     margin-right: 16px;
                     gap: 0;
                 }
             }
+        }
+    }
+    #mainOverlay {
+        #mainOverlayContent {
+            #gameHelp {
+                font-size: 16px;
+            }
+        }
+    }
+    tr {
+        td {
+            font-size: 16px;
+            padding: 0 8px 8px 0;
         }
     }
 }

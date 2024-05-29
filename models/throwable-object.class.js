@@ -88,11 +88,9 @@ class ThrowableObject extends MovableObject {
      * Plays the splash animation of the object.
      */
     playSplashAnimation() {
-        if (this.splashAnimationStarted) {
-            this.currentImage = 0;
-            playSound(this.break_sound);
-            this.splashAnimationStarted = false;
-        }
+        this.resetImage();
+        playSound(this.break_sound);
+        this.splashAnimationStarted = false;
         this.playAnimation(this.IMAGES_SPLASHING);
         this.splashAnimationCounter++;
     }

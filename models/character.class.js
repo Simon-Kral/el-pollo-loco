@@ -89,6 +89,7 @@ class Character extends MovableObject {
     constructor() {
         super().loadImage(this.IMAGES_WALKING[0]);
         this.setOffsets();
+        this.hp = 5;
         this.groundHeight = 626 - this.height + this.offset.bottom - this.offsetIncrement * this.individualSizeFactor * this.sizeFactor;
         this.loadImages([...this.IMAGES_WALKING, ...this.IMAGES_JUMPING, ...this.IMAGES_DEAD, ...this.IMAGES_HURT, ...this.IMAGES_IDLE, ...this.IMAGES_LONG_IDLE]);
         this.applyGravity();

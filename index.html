@@ -49,12 +49,48 @@
                 </div>
             </div>
         </div>
+        <div id="mainOverlay" class="dNone" onclick="hideElement(mainOverlay)">
+            <div id="mainOverlayContent" onclick="dontClose(event)">
+                <div id="mainContent">
+                    <h3>El Pollo Loco</h3>
+                    <span id="gameHelp">
+                        El Pollo Loco is a 2D Jump 'n' Run Game where you play our Mexican Hero Pepe.<br />Collect Coins and Bottles of Salsa Sauce.<br />Defeat Chicken by jumping on them or throwing a Bottle at them.<br />But don't waste all of your
+                        Bottles on the Chicken because the Endboss <br />is waiting for you at the End of the Level and jumping on him just makes him angry.<br /><br />
+                    </span>
+                    <div class="gameExplanation">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="key"><span>A</span> <span>D</span></td>
+                                    <td><span> - </span></td>
+                                    <td><span>Move</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><span>Space</span></td>
+                                    <td><span> - </span></td>
+                                    <td><span>Jump</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="key"><span>E</span></td>
+                                    <td><span> - </span></td>
+                                    <td><span>Throw Bottle</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="buttonWrapper">
+                    <button onclick="hideElement(mainOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                </div>
+            </div>
+        </div>
 
         <h1 id="mainHeader">El Pollo Loco</h1>
+        <button id="mainButton" onclick="showElement(mainOverlay)">?</button>
         <div id="canvasWrapper" class="dNone">
-            <div id="overlay" class="dNone" onclick="hideElement(overlay)">
-                <div id="overlayContent" onclick="dontClose(event)">
-                    <div class="overlayContentTopBox">
+            <div id="gameOverlay" class="dNone" onclick="hideElement(gameOverlay)">
+                <div id="gameOverlayContent" onclick="dontClose(event)">
+                    <div class="gameOverlayContentTopBox">
                         <div class="topBoxGameExplanation">
                             <h3>El Pollo Loco</h3>
                             <table id="menuKeys">
@@ -82,13 +118,13 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="overlayContentTopBoxButtons">
+                        <div class="topBoxButtons">
                             <button onclick="changeView('help', this)" class="overlayButton" id="helpButton"><img src="icons/help.png" alt="" /></button>
                             <button onclick="toggleMute('gameSound')" class="overlayButton" id="gameSoundButton">
                                 <img src="icons/speaker.png" alt="" />
                             </button>
                             <button onclick="toggleMute('backgroundMusic')" class="overlayButton" id="backgroundMusicButton"><img src="icons/musicalNote.png" alt="" /></button>
-                            <button onclick="hideElement(overlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                            <button onclick="hideElement(gameOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
                         </div>
                     </div>
                     <span id="menuHelp">
@@ -124,7 +160,7 @@
                             <line x1="5" y1="37" x2="5" y2="25" stroke="#FFC225" stroke-width="4" class="yellowLine" />
                         </svg>
                     </button>
-                    <button onclick="showElement(overlay)">
+                    <button onclick="showElement(gameOverlay)">
                         <svg height="40" width="45" class="yellow">
                             <line x1="0" y1="5" x2="45" y2="5" stroke="black" stroke-width="6" class="blackLine" />
                             <line x1="1" y1="5" x2="44" y2="5" stroke="#FFC225" stroke-width="4" class="yellowLine" />

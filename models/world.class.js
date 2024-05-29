@@ -55,12 +55,14 @@ class World {
             self.draw();
         });
     }
+
     /**
      * Sets the world properties.
      */
     setWorld() {
         this.character.world = this;
     }
+
     /**
      * Starts the game loop.
      */
@@ -71,6 +73,7 @@ class World {
             this.checkBackgroundMusic();
         }, 5);
     }
+
     /**
      * Adds objects to the map.
      * @param {Object[]} objects - The objects to add to the map.
@@ -80,6 +83,7 @@ class World {
             this.addToMap(o);
         });
     }
+
     /**
      * Draws fixed position objects on the canvas.
      * @param {Object[]} objects - The objects to draw.
@@ -91,6 +95,7 @@ class World {
         });
         this.ctx.translate(this.camera_x, 0);
     }
+
     /**
      * Adds an object to the map.
      * @param {Object} mo - The object to add.
@@ -102,6 +107,7 @@ class World {
         if (mo.constructor == StatusBarBottles || mo.constructor == StatusBarCoins) mo.addText(this.ctx, mo.constructor);
         if (mo.otherDirection) this.flipImageBack(mo);
     }
+
     /**
      * Throws a throwable object.
      */
@@ -113,6 +119,7 @@ class World {
             StatusBarBottles.lastThrown = new Date().getTime();
         }
     }
+
     /**
      * Checks for collisions between game objects.
      */
@@ -122,6 +129,7 @@ class World {
         this.checkBottles();
         this.checkCoins();
     }
+
     /**
      * Checks for collisions with enemies.
      */
@@ -131,16 +139,18 @@ class World {
             this.removeDeadEnemy(enemy, index);
         });
     }
+
     /**
      * Checks collision between character and enemy.
      * @param {Object} enemy - The enemy object.
      */
     checkCharacterWithEnemy(enemy) {
         if (this.character.isColliding(enemy) && !enemy.isDead() && !(enemy instanceof StatusBarEndboss)) {
-            if (this.character.isAboveGround() && enemy instanceof Chicken) this.hitEnemy(enemy);
+            if (this.character.isAboveGround() && enemy instanceof Chicken && this.character.speedY < 0) this.hitEnemy(enemy);
             else if (!this.character.isHurt()) this.hitCharacter();
         }
     }
+
     /**
      * Handles hitting an enemy.
      * @param {Object} enemy - The enemy object.
@@ -151,6 +161,7 @@ class World {
         await playSound(this.character.jump_sound);
         this.character.speedY = 8;
     }
+
     /**
      * Handles character being hit.
      */
@@ -159,6 +170,7 @@ class World {
         await playSound(this.character.hurt_sound);
         this.statusBarHealth.setPercentage(this.character.hp);
     }
+
     /**
      * Removes dead enemies from the game.
      * @param {Object} enemy - The enemy object.
@@ -177,6 +189,7 @@ class World {
             this.level.enemies.splice(index, 1);
         }
     }
+
     /**
      * Checks for collisions involving throwable objects.
      */
@@ -189,6 +202,7 @@ class World {
             this.ckeckSplash(obj, index);
         });
     }
+
     /**
      * Checks collision between bottle and chicken enemy.
      * @param {Object} enemy - The enemy object.
@@ -201,6 +215,7 @@ class World {
             obj.splash();
         }
     }
+
     /**
      * Checks collision between bottle and endboss enemy.
      * @param {Object} enemy - The enemy object.
@@ -279,7 +294,7 @@ class World {
         if (!backgroundMusicIsPlaying) {
             this.background_music.volume = 0.2;
             this.background_music.loop = true;
-            await playSound(this.background_music);
+            await playMusic(this.background_music);
             backgroundMusicIsPlaying = true;
         } else if (backgroundMusicMuted && backgroundMusicIsPlaying) {
             this.background_music.pause();

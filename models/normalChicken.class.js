@@ -5,9 +5,9 @@ class NormalChicken extends Chicken {
     width = 248;
     height = 243;
     individualSizeFactor = 1.1 + Math.random() * 0.5;
-    offsetIncrement = 40;
+    offsetIncrement = 25;
     offset = {
-        top: 13 + this.offsetIncrement,
+        top: 18 + this.offsetIncrement,
         left: 5 + this.offsetIncrement,
         right: 7 + this.offsetIncrement,
         bottom: 15 + this.offsetIncrement,
