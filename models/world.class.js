@@ -68,10 +68,10 @@ class World {
      */
     run() {
         setInterval(() => {
-            this.checkCollisions();
             this.throw();
+            this.checkCollisions();
             this.checkBackgroundMusic();
-        }, 5);
+        }, 25);
     }
 
     /**
@@ -224,6 +224,7 @@ class World {
     async checkBottleWithEndboss(enemy, obj) {
         if (obj.isColliding(enemy) && enemy instanceof Endboss && !enemy.isDead() && !obj.isSplashed) {
             enemy.hit(1);
+            console.log('Endboss hit');
             await playSound(enemy.hurt_sound);
             const statusbarIndex = this.level.enemies.findIndex((statusBarEndboss) => statusBarEndboss instanceof StatusBarEndboss);
             this.level.enemies[statusbarIndex].setPercentage(enemy.hp);

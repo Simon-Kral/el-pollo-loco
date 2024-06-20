@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>El Pollo Loco</title>
         <link rel="stylesheet" href="style.css" />
-        <link rel="icon" type="image/x-icon" href="icons/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
         <script src="models/drawable-object.class.js"></script>
         <script src="models/movable-object.class.js"></script>
         <script src="models/character.class.js"></script>
@@ -36,7 +36,7 @@
                 <div class="contentWrapper customScrollbar">
                     <div id="metaContent"></div>
                     <div class="buttonWrapper">
-                        <button onclick="hideElement(metaOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                        <button onclick="hideElement(metaOverlay)" class="overlayButton"><img src="img/close.png" alt="" /></button>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
             <div id="rotationOverlayContent" onclick="dontClose(event)">
                 <div id="rotationContent"><span>please turn your device to play!</span></div>
                 <div class="buttonWrapper">
-                    <button onclick="hideElement(rotationOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                    <button onclick="hideElement(rotationOverlay)" class="overlayButton"><img src="img/close.png" alt="" /></button>
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
                 <div class="buttonWrapper">
-                    <button onclick="hideElement(mainOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                    <button onclick="hideElement(mainOverlay)" class="overlayButton"><img src="img/close.png" alt="" /></button>
                 </div>
             </div>
         </div>
@@ -119,12 +119,12 @@
                             </table>
                         </div>
                         <div class="topBoxButtons">
-                            <button onclick="changeView('help', this)" class="overlayButton" id="helpButton"><img src="icons/help.png" alt="" /></button>
+                            <button onclick="changeView('help', this)" class="overlayButton" id="helpButton"><img src="img/help.png" alt="" /></button>
                             <button onclick="toggleMute('gameSound')" class="overlayButton" id="gameSoundButton">
-                                <img src="icons/speaker.png" alt="" />
+                                <img src="img/speaker.png" alt="" />
                             </button>
-                            <button onclick="toggleMute('backgroundMusic')" class="overlayButton" id="backgroundMusicButton"><img src="icons/musicalNote.png" alt="" /></button>
-                            <button onclick="hideElement(gameOverlay)" class="overlayButton"><img src="icons/close.png" alt="" /></button>
+                            <button onclick="toggleMute('backgroundMusic')" class="overlayButton" id="backgroundMusicButton"><img src="img/musicalNote.png" alt="" /></button>
+                            <button onclick="hideElement(gameOverlay)" class="overlayButton"><img src="img/close.png" alt="" /></button>
                         </div>
                     </div>
                     <span id="menuHelp">

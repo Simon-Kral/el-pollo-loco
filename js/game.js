@@ -142,10 +142,10 @@ function toggleMute(sound) {
     const button = document.getElementById(`${sound}Button`);
     if (sound === "gameSound") {
         gameSoundMuted = newMutedStatus;
-        button.children[0].src = newMutedStatus ? "icons/mute.png" : "icons/speaker.png";
+        button.children[0].src = newMutedStatus ? "./img/mute.png" : "./img/speaker.png";
     } else if (sound === "backgroundMusic") {
         backgroundMusicMuted = newMutedStatus;
-        button.children[0].src = newMutedStatus ? "icons/musicalNoteMuted.png" : "icons/musicalNote.png";
+        button.children[0].src = newMutedStatus ? "./img/musicalNoteMuted.png" : "./img/musicalNote.png";
     }
 }
 
@@ -200,12 +200,12 @@ function changeView(selector, btn) {
         document.getElementById("menuKeys").style.display = "none";
         document.getElementById("menuHelp").style.display = "block";
         btn.setAttribute("onclick", `changeView('keys', this)`);
-        btn.children[0].setAttribute("src", `icons/keys.png`);
+        btn.children[0].setAttribute("src", `./img/keys.png`);
     } else if (selector === "keys") {
         document.getElementById("menuHelp").style.display = "none";
         document.getElementById("menuKeys").style.display = "block";
         btn.setAttribute("onclick", `changeView('help', this)`);
-        btn.children[0].setAttribute("src", `icons/help.png`);
+        btn.children[0].setAttribute("src", `./img/help.png`);
     }
 }
 
