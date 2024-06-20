@@ -68,10 +68,12 @@ class World {
      */
     run() {
         setInterval(() => {
-            this.throw();
             this.checkCollisions();
-            this.checkBackgroundMusic();
         }, 25);
+        setInterval(() => {
+            this.checkBackgroundMusic();
+            this.throw();
+        }, 10);
     }
 
     /**
